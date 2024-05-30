@@ -41,7 +41,7 @@ class CategoryController extends Controller
             'name' => 'required|string|min:3|unique:categories',
             'description' => 'required|min:10',
             'image' => 'required|string',
-            'warning' => 'string'
+            'warning' => 'string|min:10'
         ]);
 
         if ($validation->fails()) {
@@ -191,12 +191,5 @@ class CategoryController extends Controller
         }
 
         $category->delete();
-
-        $response = [
-            'message' => 'Category deleted',
-            'status' => 204
-        ];
-
-        return response()->json($response, 204);
     }
 }
