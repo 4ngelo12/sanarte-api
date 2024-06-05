@@ -211,8 +211,9 @@ class ServiceController extends Controller
             ], 500);
         }
 
+        $service->delete();
+
         $response = [
-            'message' => 'Service deleted',
             'status' => 204
         ];
 
