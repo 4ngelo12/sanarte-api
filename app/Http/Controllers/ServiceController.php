@@ -41,8 +41,9 @@ class ServiceController extends Controller
             'name' => 'required|string|min:3|unique:services',
             'description' => 'string|min:10',
             'image' => 'required|string',
-            'price' => 'numeric|regex:/^\d+(\.\d{1,2})?$/',
-            'duration' => 'integer',
+            'price' => ['nullable', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'],
+            'duration' => 'array|min:1|max:2',
+            'duration.*' => 'integer',
             'category_id' => 'required|integer'
         ]);
 
@@ -116,8 +117,10 @@ class ServiceController extends Controller
             'name' => 'required|string|min:3|unique:categories,name,' . $id,
             'description' => 'string|min:10',
             'image' => 'required|string',
-            'price' => 'decimal:2',
-            'duration' => 'integer',
+            'price' => ['nullable', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'],
+            'duration' => 'array|min:1|max:2',
+            'duration.*' => 'integer',
+            'state' => 'required|boolean',
             'category_id' => 'required|integer'
         ]);
 
@@ -130,7 +133,6 @@ class ServiceController extends Controller
 
         // Obtén los datos validados
         $validatedData = $validation->validated();
-
         $service->fill($validatedData);
 
         if (!$service->save()) {
@@ -164,8 +166,10 @@ class ServiceController extends Controller
             'name' => 'string|min:3|unique:categories,name,' . $id,
             'description' => 'string|min:10',
             'image' => 'string',
-            'price' => 'decimal:2',
-            'duration' => 'integer',
+            'price' => ['nullable', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'],
+            'state' => 'boolean',
+            'duration' => 'array|min:1|max:2',
+            'duration.*' => 'integer',
             'category_id' => 'integer'
         ]);
 
@@ -178,7 +182,6 @@ class ServiceController extends Controller
 
         // Obtén los datos validados
         $validatedData = $validation->validated();
-
         $service->update($validatedData);
 
         $response = [
@@ -204,19 +207,20 @@ class ServiceController extends Controller
             ], 404);
         }
 
-        if (!$service->delete()) {
+        // Actualizar el estado del servicio a false
+        $service->state = false;
+
+        // Guardar los cambios en la base de datos
+        if (!$service->save()) {
             return response()->json([
-                'message' => 'Error deleting service',
+                'message' => 'Error updating service',
                 'status' => 500
             ], 500);
         }
 
-        $service->delete();
-
-        $response = [
+        // Respuesta exitosa
+        return response()->json([
             'status' => 204
-        ];
-
-        return response()->json($response, 204);
+        ], 204);
     }
 }

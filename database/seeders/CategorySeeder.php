@@ -17,7 +17,7 @@ class CategorySeeder extends Seeder
             [
                 'name' => 'Masajes',
                 'description' => 'Ofrecemos masajes personalizados utilizando diversas técnicas para activar y regenerar el organismo, aliviar el dolor, mejorar la circulación, reducir el estrés, aumentar la relajación y promover la salud y el bienestar general',
-                'warning' => 'nflamaciones, enfermedades infecciosas o contagiosas, cáncer, tumores, quistes, hematomas, úlceras avanzadas, varices avanzadas, cicatrices recientes, fracturas, hemorragias internas, fiebres, apendicitis',
+                'warning' => 'Inflamaciones, enfermedades infecciosas o contagiosas, cáncer, tumores, quistes, hematomas, úlceras avanzadas, varices avanzadas, cicatrices recientes, fracturas, hemorragias internas, fiebres, apendicitis',
                 'image' => 'masajes'
             ],
             [

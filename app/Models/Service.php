@@ -16,7 +16,12 @@ class Service extends Model
         'description',
         'image',
         'price',
+        'state',
         'duration',
         'category_id'
+    ];
+    
+    protected $casts = [
+        'duration' => 'array' // Indica que 'duration' se debe tratar como un arreglo al guardar y recuperar datos
     ];
 }

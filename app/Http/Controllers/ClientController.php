@@ -40,7 +40,7 @@ class ClientController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|min:3',
             'lastname' => 'required|string|min:3',
-            'email' => 'email|unique:clients',
+            'email' => 'nullable|email|unique:clients',
             'phone' => 'required|string|min:9|max:9|regex:/^[9]{1}[0-9]{8}$/|unique:clients'
         ]);
 
@@ -113,7 +113,7 @@ class ClientController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|min:3',
             'lastname' => 'required|string|min:3',
-            'email' => 'email|unique:clients,email,' . $id,
+            'email' => 'nullable|unique:clients,email,' . $id,
             'phone' => 'required|string|max:9|regex:/^[9]{1}[0-9]{8}$/|unique:clients,phone,' . $id
         ]);
 
@@ -159,7 +159,7 @@ class ClientController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'string|min:3',
             'lastname' => 'string|min:3',
-            'email' => 'email|unique:clients,email,' . $id,
+            'email' => 'nullable|email|unique:clients,email,' . $id,
             'phone' => 'string|max:9|regex:/^[9]{1}[0-9]{8}$/|unique:clients,phone,' . $id
         ]);
 

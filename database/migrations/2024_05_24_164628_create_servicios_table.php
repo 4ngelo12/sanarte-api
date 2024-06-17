@@ -26,11 +26,10 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('image', length: 60);
             $table->decimal('price', total: 8, places: 2)->nullable();
-            $table->integer('duration')->nullable();
+            $table->json('duration')->nullable();
             $table->boolean('state')->default(value: true);
             $table->foreignId('category_id')->constrained(table: 'categories', indexName: 'category_id');
             $table->timestamps();
-
         });
     }
 

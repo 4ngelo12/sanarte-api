@@ -41,7 +41,7 @@ class CategoryController extends Controller
             'name' => 'required|string|min:3|unique:categories',
             'description' => 'required|min:10',
             'image' => 'required|string',
-            'warning' => 'string|min:10'
+            'warning' => 'nullable|string|min:10'
         ]);
 
         if ($validation->fails()) {
@@ -113,7 +113,7 @@ class CategoryController extends Controller
             'name' => 'required|string|min:3|unique:categories,name,' . $id,
             'description' => 'required|min:10',
             'image' => 'required|string',
-            'warning' => 'string'
+            'warning' => 'nullable|string|min:10'
         ]);
 
         if ($validation->fails()) {
