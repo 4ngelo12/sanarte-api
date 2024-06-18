@@ -6,11 +6,19 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\StatusController;
 
 //Auth
 Route::post('/users/register', [AuthController::class, 'register']);
 Route::post('/users/login', [AuthController::class, 'login']);
+
+// Users
+
+Route::middleware('jwt.verify')->group(function () {
+    Route::get('/users/{id}', [AuthController::class, 'show']);
+});
 
 // Categorías
 Route::get('/categories', [CategoryController::class, 'index']);
@@ -42,4 +50,20 @@ Route::middleware('jwt.verify')->group(function () {
     Route::delete('/clients/{id}', [ClientController::class, 'destroy']);
     Route::put('/clients/{id}', [ClientController::class, 'update']);
     Route::patch('/clients/{id}', [ClientController::class, 'updatePartial']);
+});
+
+// Status
+Route::middleware('jwt.verify')->group(function () {
+    Route::get('/status', [StatusController::class, 'index']);
+    Route::post('/status', [StatusController::class, 'store']);
+});
+
+// Reservations
+Route::middleware('jwt.verify')->group(function () {
+    Route::get('/reservations', [ReservationController::class, 'index']);
+    Route::get('/reservations/{id}', [ReservationController::class, 'show']);
+    Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
+    Route::put('/reservations/{id}', [ReservationController::class, 'update']);
+    Route::patch('/reservations/{id}', [ReservationController::class, 'updatePartial']);
 });
