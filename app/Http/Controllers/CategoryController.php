@@ -24,7 +24,7 @@ class CategoryController extends Controller
         }
 
         $response = [
-            'message' => 'Categories found',
+            'message' => 'Categorias no encontradas',
             'status' => 200,
             'data' => $categories
         ];
@@ -46,7 +46,7 @@ class CategoryController extends Controller
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -58,13 +58,13 @@ class CategoryController extends Controller
 
         if (!$categories) {
             return response()->json([
-                'message' => 'Error creating category',
+                'message' => 'Hubo un problema, intente nuevamente',
                 'status' => 500
             ], 500);
         }
 
         $response = [
-            'message' => 'Category created',
+            'message' => 'Categoria creada correctamente',
             'status' => 201,
             'data' => $categories
         ];
@@ -81,13 +81,13 @@ class CategoryController extends Controller
 
         if (!$category) {
             return response()->json([
-                'message' => 'Category don\'t exist',
+                'message' => 'La categoría que buscas no existe',
                 'status' => 404
             ], 404);
         }
 
         $response = [
-            'message' => 'Category found',
+            'message' => 'Category Encontrada',
             'status' => 200,
             'data' => $category
         ];
@@ -113,12 +113,13 @@ class CategoryController extends Controller
             'name' => 'required|string|min:3|unique:categories,name,' . $id,
             'description' => 'required|min:10',
             'image' => 'required|string',
-            'warning' => 'nullable|string|min:10'
+            'warning' => 'nullable|string|min:10',
+            'state' => 'required|boolean',
         ]);
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -129,7 +130,7 @@ class CategoryController extends Controller
         $category->update($validatedData);
 
         $response = [
-            'message' => 'Category updated',
+            'message' => 'Datos Actualizados',
             'status' => 200,
             'data' => $category
         ];
@@ -143,7 +144,7 @@ class CategoryController extends Controller
 
         if (!$category) {
             return response()->json([
-                'message' => 'Category not found',
+                'message' => 'Categoria no encontrada',
                 'status' => 404
             ], 404);
         }
@@ -152,12 +153,13 @@ class CategoryController extends Controller
             'name' => 'string|min:3|unique:categories,name,' . $id,
             'description' => 'min:10',
             'image' => 'string',
-            'warning' => 'string'
+            'warning' => 'string',
+            'state' => 'boolean',
         ]);
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -190,7 +192,16 @@ class CategoryController extends Controller
             ], 404);
         }
 
-        $category->delete();
+        // Actualizar el estado del servicio a false
+        $category->state = false;
+
+        // Guardar los cambios en la base de datos
+        if (!$category->save()) {
+            return response()->json([
+                'message' => 'Error al desactivar la categoria',
+                'status' => 500
+            ], 500);
+        }
 
         $response = [
             'status' => 204

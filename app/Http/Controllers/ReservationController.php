@@ -60,7 +60,7 @@ class ReservationController extends Controller
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -82,13 +82,13 @@ class ReservationController extends Controller
 
         if (!$reservation) {
             return response()->json([
-                'message' => 'Error creating reservation',
+                'message' => 'Error al realizar la reserva, intente nuevamente',
                 'status' => 500
             ], 500);
         }
 
         $response = [
-            'message' => 'Reservation created',
+            'message' => 'Reserva realizada correctamente',
             'status' => 201,
             'data' => $reservation
         ];
@@ -105,14 +105,14 @@ class ReservationController extends Controller
 
         if (!$reservation) {
             $data = [
-                'message' => 'Reservation don\'t exist',
+                'message' => 'La reserva que buscas no existe',
                 'status' => 404
             ];
             return response()->json($data, 404);
         }
 
         $data = [
-            'message' => 'Reservation found',
+            'message' => 'Reserva encontrada',
             'status' => 200,
             'data' => $reservation
         ];
@@ -129,7 +129,7 @@ class ReservationController extends Controller
 
         if (!$reservation) {
             return response()->json([
-                'message' => 'Reservation not found',
+                'message' => 'La reserva que buscas no existe',
                 'status' => 404
             ], 404);
         }
@@ -156,7 +156,7 @@ class ReservationController extends Controller
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -167,13 +167,13 @@ class ReservationController extends Controller
 
         if (!$reservation->save()) {
             return response()->json([
-                'message' => 'Error updating reservation',
+                'message' => 'Error al actualizar la información de la reserva',
                 'status' => 500
             ], 500);
         }
 
         $response = [
-            'message' => 'Reservation updated',
+            'message' => 'Reserva actualizada correctamente',
             'status' => 200,
             'data' => $reservation
         ];
@@ -187,7 +187,7 @@ class ReservationController extends Controller
 
         if (!$reservation) {
             return response()->json([
-                'message' => 'Reservation not found',
+                'message' => 'La reserva que buscas no existe',
                 'status' => 404
             ], 404);
         }
@@ -214,7 +214,7 @@ class ReservationController extends Controller
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -224,7 +224,7 @@ class ReservationController extends Controller
         $reservation->update($validatedData);
 
         $response = [
-            'message' => 'Reservation updated',
+            'message' => 'Reserva actualizada correctamente',
             'status' => 200,
             'data' => $reservation
         ];
@@ -241,7 +241,7 @@ class ReservationController extends Controller
 
         if (!$reservation) {
             return response()->json([
-                'message' => 'Reservation not found',
+                'message' => 'La reserva que buscas no existe',
                 'status' => 404
             ], 404);
         }
@@ -252,7 +252,7 @@ class ReservationController extends Controller
         // Guardar los cambios en la base de datos
         if (!$reservation->save()) {
             return response()->json([
-                'message' => 'Error updating reservation',
+                'message' => 'Error al actualizar la información de la reserva',
                 'status' => 500
             ], 500);
         }

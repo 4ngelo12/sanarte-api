@@ -49,7 +49,7 @@ class ServiceController extends Controller
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -61,13 +61,13 @@ class ServiceController extends Controller
 
         if (!$service) {
             return response()->json([
-                'message' => 'Error creating service',
+                'message' => 'Error al guardar el servicio en la base de datos',
                 'status' => 500
             ], 500);
         }
 
         $response = [
-            'message' => 'Service created',
+            'message' => 'Servicio creado correctamente',
             'status' => 201,
             'data' => $service
         ];
@@ -84,14 +84,14 @@ class ServiceController extends Controller
 
         if (!$service) {
             $data = [
-                'message' => 'Service don\'t exist',
+                'message' => 'El servicio no fue encontrado',
                 'status' => 404
             ];
             return response()->json($data, 404);
         }
 
         $data = [
-            'message' => 'Service found',
+            'message' => 'Servicio Encontrado',
             'status' => 200,
             'data' => $service
         ];
@@ -108,7 +108,7 @@ class ServiceController extends Controller
 
         if (!$service) {
             return response()->json([
-                'message' => 'Service not found',
+                'message' => 'El servicio no fue encontrado',
                 'status' => 404
             ], 404);
         }
@@ -126,7 +126,7 @@ class ServiceController extends Controller
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -137,13 +137,13 @@ class ServiceController extends Controller
 
         if (!$service->save()) {
             return response()->json([
-                'message' => 'Error updating service',
+                'message' => 'Error al actualizar el servicio en la base de datos',
                 'status' => 500
             ], 500);
         }
 
         $response = [
-            'message' => 'Service updated',
+            'message' => 'La información del servicio ha sido actualizada correctamente',
             'status' => 200,
             'data' => $service
         ];
@@ -157,7 +157,7 @@ class ServiceController extends Controller
 
         if (!$service) {
             return response()->json([
-                'message' => 'Service not found',
+                'message' => 'El servicio no fue encontrado',
                 'status' => 404
             ], 404);
         }
@@ -175,7 +175,7 @@ class ServiceController extends Controller
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -185,7 +185,7 @@ class ServiceController extends Controller
         $service->update($validatedData);
 
         $response = [
-            'message' => 'Service updated',
+            'message' => 'La información del servicio ha sido actualizada correctamente',
             'status' => 200,
             'data' => $service
         ];
@@ -202,7 +202,7 @@ class ServiceController extends Controller
 
         if (!$service) {
             return response()->json([
-                'message' => 'Service not found',
+                'message' => 'El servicio no fue encontrado',
                 'status' => 404
             ], 404);
         }
@@ -213,7 +213,7 @@ class ServiceController extends Controller
         // Guardar los cambios en la base de datos
         if (!$service->save()) {
             return response()->json([
-                'message' => 'Error updating service',
+                'message' => 'Error al desactivar el servicio',
                 'status' => 500
             ], 500);
         }

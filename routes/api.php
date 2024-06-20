@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\UsuarioController;
 
 //Auth
 Route::post('/users/register', [AuthController::class, 'register']);
@@ -17,7 +19,16 @@ Route::post('/users/login', [AuthController::class, 'login']);
 // Users
 
 Route::middleware('jwt.verify')->group(function () {
-    Route::get('/users/{id}', [AuthController::class, 'show']);
+    Route::get('/users/list/{id}', [UsuarioController::class, 'index']);
+    Route::get('/users/{id}', [UsuarioController::class, 'show']);
+    Route::patch('/users/{id}', [UsuarioController::class, 'updatePartial']);
+    Route::delete('/users/{id}', [UsuarioController::class, 'destroy']);
+});
+
+// Roles
+Route::middleware('jwt.verify')->group(function () {
+    Route::get('/roles', [RoleController::class, 'index']);
+    Route::get('/roles/{id}', [RoleController::class, 'show']);
 });
 
 // Categorías

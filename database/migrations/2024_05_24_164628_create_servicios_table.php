@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->text('warning')->nullable();
             $table->string('image', length: 60);
+            $table->boolean('state')->default(value: true);
             $table->timestamps();
         });
 

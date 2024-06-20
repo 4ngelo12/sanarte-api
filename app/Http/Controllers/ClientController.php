@@ -46,7 +46,7 @@ class ClientController extends Controller
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -58,13 +58,13 @@ class ClientController extends Controller
 
         if (!$client) {
             return response()->json([
-                'message' => 'Error creating client',
+                'message' => 'Error al crear el cliente',
                 'status' => 500
             ], 500);
         }
 
         $response = [
-            'message' => 'Client created',
+            'message' => 'Cliente registrado correctamente',
             'status' => 201,
             'data' => $client
         ];
@@ -81,14 +81,14 @@ class ClientController extends Controller
 
         if (!$client) {
             $data = [
-                'message' => 'Client don\'t exist',
+                'message' => 'El cliente no existe',
                 'status' => 404
             ];
             return response()->json($data, 404);
         }
 
         $data = [
-            'message' => 'Client found',
+            'message' => 'Client encontrado',
             'status' => 200,
             'data' => $client
         ];
@@ -119,7 +119,7 @@ class ClientController extends Controller
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -131,13 +131,13 @@ class ClientController extends Controller
 
         if (!$client->save()) {
             return response()->json([
-                'message' => 'Error updating client',
+                'message' => 'Error actualizando los datos del cliente',
                 'status' => 500
             ], 500);
         }
 
         $response = [
-            'message' => 'Client updated',
+            'message' => 'Datos del cliente actualizados correctamente',
             'status' => 200,
             'data' => $client
         ];
@@ -165,7 +165,7 @@ class ClientController extends Controller
 
         if ($validation->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Hubo un error al validar los datos, por favor verifica los campos',
                 'errors' => $validation->errors()
             ], 400);
         }
@@ -176,7 +176,7 @@ class ClientController extends Controller
         $client->update($validatedData);
 
         $response = [
-            'message' => 'Client updated',
+            'message' => 'Datos del cliente actualizados correctamente',
             'status' => 200,
             'data' => $client
         ];
@@ -193,14 +193,14 @@ class ClientController extends Controller
 
         if (!$client) {
             return response()->json([
-                'message' => 'Client not found',
+                'message' => 'Cliente no encontrado',
                 'status' => 404
             ], 404);
         }
 
         if (!$client->delete()) {
             return response()->json([
-                'message' => 'Error deleting client',
+                'message' => 'Error al eliminar el cliente',
                 'status' => 500
             ], 500);
         }
