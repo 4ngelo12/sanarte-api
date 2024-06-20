@@ -32,6 +32,27 @@ class CategoryController extends Controller
         return response()->json($response, 200);
     }
 
+    public function categoriesActive()
+    {
+        $categories = Category::where('state', true)->get();
+
+        if ($categories->isEmpty()) {
+            $data = [
+                'message' => 'No hay categorias activas disponibles',
+                'status' => 200
+            ];
+            return response()->json($data, 200);
+        }
+
+        $data = [
+            'message' => 'Categorias encontradas',
+            'status' => 200,
+            'data' => $categories
+        ];
+
+        return response()->json($data, 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -40,7 +61,7 @@ class CategoryController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|min:3|unique:categories',
             'description' => 'required|min:10',
-            'image' => 'required|string',
+            // 'image' => 'required|string',
             'warning' => 'nullable|string|min:10'
         ]);
 
@@ -112,7 +133,7 @@ class CategoryController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|min:3|unique:categories,name,' . $id,
             'description' => 'required|min:10',
-            'image' => 'required|string',
+            // 'image' => 'required|string',
             'warning' => 'nullable|string|min:10',
             'state' => 'required|boolean',
         ]);
@@ -152,7 +173,7 @@ class CategoryController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'string|min:3|unique:categories,name,' . $id,
             'description' => 'min:10',
-            'image' => 'string',
+            // 'image' => 'string',
             'warning' => 'string',
             'state' => 'boolean',
         ]);

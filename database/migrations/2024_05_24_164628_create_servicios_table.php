@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name', length: 45)->unique();
             $table->text('description');
             $table->text('warning')->nullable();
-            $table->string('image', length: 60);
+            // $table->string('image', length: 60);
             $table->boolean('state')->default(value: true);
             $table->timestamps();
         });
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', length: 60);
             $table->text('description')->nullable();
-            $table->string('image', length: 60);
+            // $table->string('image', length: 60);
             $table->decimal('price', total: 8, places: 2)->nullable();
             $table->json('duration')->nullable();
             $table->boolean('state')->default(value: true);

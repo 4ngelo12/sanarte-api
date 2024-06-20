@@ -21,6 +21,57 @@ class Reservation extends Model
         'service_id'
     ];
 
+    protected $appends = ['user_name', 'client_name', 'service_name', 'status_name'];
+
+    protected $hidden = [
+        'client',
+        'service',
+        'user',
+        'status',
+        "created_at",
+        "updated_at"
+    ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function getClientNameAttribute()
+    {
+        return $this->client->name . ' ' . $this->client->lastname;
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
+
+    public function getServiceNameAttribute()
+    {
+        return $this->service->name;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getUserNameAttribute()
+    {
+        return $this->user->name;
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
+
+    public function getStatusNameAttribute()
+    {
+        return $this->status->name;
+    }
+
     public function getTimeReservationAttribute($value)
     {
         return Carbon::parse($value)->format('H:i');

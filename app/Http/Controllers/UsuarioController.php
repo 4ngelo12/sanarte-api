@@ -21,9 +21,6 @@ class UsuarioController extends Controller
             return response()->json($data, 200);
         }
 
-        $role_name = $user[0]->role->name;
-        $user[0]->role_name = $role_name;
-
         $data = [
             'message' => 'Usuarios encontrados',
             'status' => 200,

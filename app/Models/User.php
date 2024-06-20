@@ -22,13 +22,20 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'state',
-        'role_id',
-        'role'
+        'role_id'
     ];
+
+    protected $appends = ['role_name'];
 
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    // Accessor para obtener el nombre del rol
+    public function getRoleNameAttribute()
+    {
+        return $this->role->name;
     }
 
     /**
@@ -39,6 +46,9 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'role',
+        "created_at",
+        "updated_at"
     ];
 
     /**
@@ -59,12 +69,13 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return mixed
      */
-    public function getJWTIdentifier() {
+    public function getJWTIdentifier()
+    {
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims(): array {
+    public function getJWTCustomClaims(): array
+    {
         return [];
     }
-
 }

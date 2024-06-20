@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('lastname', length: 45);
             $table->string('email', length: 60)->unique()->nullable();
             $table->string('phone', length: 9)->unique();
+            $table->boolean('state')->default(value: true);
             $table->timestamps();
         });
     }

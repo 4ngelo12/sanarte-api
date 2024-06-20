@@ -15,7 +15,7 @@ class Category extends Model
         'name',
         'description',
         'warning',
-        'image',
+        // 'image',
         'state'
     ];
 }

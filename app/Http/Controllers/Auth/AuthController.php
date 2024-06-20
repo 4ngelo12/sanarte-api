@@ -78,6 +78,15 @@ class AuthController extends Controller
             // Obtener el usuario autenticado
             $user = JWTAuth::user();
 
+            // Verificar si el usuario está desactivado
+            if (!$user->state) {
+                return response()->json([
+                    'message' => 'El usuario está desactivado',
+                    'status' => 403
+                ], 403);
+            }
+
+
             // Definir reclamaciones personalizadas (incluyendo 'role_id')
             $customClaims = [
                 'role' => $user->role->name,

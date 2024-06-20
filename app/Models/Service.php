@@ -14,14 +14,34 @@ class Service extends Model
     protected $fillable = [
         'name',
         'description',
-        'image',
+        // 'image',
         'price',
         'state',
         'duration',
         'category_id'
     ];
+
+    protected $appends = ['category_name'];
     
     protected $casts = [
         'duration' => 'array' // Indica que 'duration' se debe tratar como un arreglo al guardar y recuperar datos
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function getCategoryNameAttribute()
+    {
+        return $this->category->name;
+    }
+
+    protected $hidden = [
+        'category',
+        "created_at",
+        "updated_at"
+    ];
+
+   
 }

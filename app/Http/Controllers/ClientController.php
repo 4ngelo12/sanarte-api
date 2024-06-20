@@ -114,7 +114,8 @@ class ClientController extends Controller
             'name' => 'required|string|min:3',
             'lastname' => 'required|string|min:3',
             'email' => 'nullable|unique:clients,email,' . $id,
-            'phone' => 'required|string|max:9|regex:/^[9]{1}[0-9]{8}$/|unique:clients,phone,' . $id
+            'phone' => 'required|string|max:9|regex:/^[9]{1}[0-9]{8}$/|unique:clients,phone,' . $id,
+            'state' => 'boolean',
         ]);
 
         if ($validation->fails()) {
@@ -160,7 +161,8 @@ class ClientController extends Controller
             'name' => 'string|min:3',
             'lastname' => 'string|min:3',
             'email' => 'nullable|email|unique:clients,email,' . $id,
-            'phone' => 'string|max:9|regex:/^[9]{1}[0-9]{8}$/|unique:clients,phone,' . $id
+            'phone' => 'string|max:9|regex:/^[9]{1}[0-9]{8}$/|unique:clients,phone,' . $id,
+            'state' => 'boolean',
         ]);
 
         if ($validation->fails()) {
@@ -198,14 +200,15 @@ class ClientController extends Controller
             ], 404);
         }
 
-        if (!$client->delete()) {
+        $client->state = false;
+
+        if (!$client->save()) {
             return response()->json([
-                'message' => 'Error al eliminar el cliente',
+                'message' => 'Error al desactivar el cliente',
                 'status' => 500
             ], 500);
         }
 
-        $client->delete();
 
         $response = [
             'status' => 204

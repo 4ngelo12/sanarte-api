@@ -13,9 +13,9 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $service = Service::all();
+        $services = Service::with('category')->get();
 
-        if ($service->isEmpty()) {
+        if ($services->isEmpty()) {
             $data = [
                 'message' => 'No services found',
                 'status' => 200
@@ -26,7 +26,28 @@ class ServiceController extends Controller
         $data = [
             'message' => 'Services found',
             'status' => 200,
-            'data' => $service
+            'data' => $services
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function servicesActive()
+    {
+        $services = Service::where('state', true)->with('category')->get();
+
+        if ($services->isEmpty()) {
+            $data = [
+                'message' => 'No hay servicios activos disponibles',
+                'status' => 200
+            ];
+            return response()->json($data, 200);
+        }
+
+        $data = [
+            'message' => 'Services found',
+            'status' => 200,
+            'data' => $services
         ];
 
         return response()->json($data, 200);
@@ -40,7 +61,7 @@ class ServiceController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|min:3|unique:services',
             'description' => 'string|min:10',
-            'image' => 'required|string',
+            // 'image' => 'required|string',
             'price' => ['nullable', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'],
             'duration' => 'array|min:1|max:2',
             'duration.*' => 'integer',
@@ -116,7 +137,7 @@ class ServiceController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|min:3|unique:categories,name,' . $id,
             'description' => 'string|min:10',
-            'image' => 'required|string',
+            // 'image' => 'required|string',
             'price' => ['nullable', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'],
             'duration' => 'array|min:1|max:2',
             'duration.*' => 'integer',
@@ -165,7 +186,7 @@ class ServiceController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'string|min:3|unique:categories,name,' . $id,
             'description' => 'string|min:10',
-            'image' => 'string',
+            // 'image' => 'string',
             'price' => ['nullable', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'],
             'state' => 'boolean',
             'duration' => 'array|min:1|max:2',

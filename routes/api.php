@@ -36,6 +36,7 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{id}', [CategoryController::class, 'show']);
 
 Route::middleware('jwt.verify')->group(function () {
+    Route::get('/categories/list/active', [CategoryController::class, 'categoriesActive']);
     Route::post('/categories', [CategoryController::class, 'store']);
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
     Route::put('/categories/{id}', [CategoryController::class, 'update']);
@@ -47,6 +48,7 @@ Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/services/{id}', [ServiceController::class, 'show']);
 
 Route::middleware('jwt.verify')->group(function () {
+    Route::get('/services/list/active', [ServiceController::class, 'servicesActive']);
     Route::post('/services', [ServiceController::class, 'store']);
     Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
     Route::put('/services/{id}', [ServiceController::class, 'update']);
