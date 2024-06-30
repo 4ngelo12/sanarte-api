@@ -37,6 +37,11 @@ class Service extends Model
         return $this->category->name;
     }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
     protected $hidden = [
         'category',
         "created_at",

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceController;
@@ -79,4 +80,10 @@ Route::middleware('jwt.verify')->group(function () {
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
     Route::put('/reservations/{id}', [ReservationController::class, 'update']);
     Route::patch('/reservations/{id}', [ReservationController::class, 'updatePartial']);
+});
+
+// Home
+Route::middleware('jwt.verify')->group(function () {
+    Route::get('/top-services-last-month', [HomeController::class, 'topServicesLastMonth']);
+    Route::get('/top-days-last-month', [HomeController::class, 'topDaysLastMonth']);
 });
