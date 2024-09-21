@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceController;
@@ -86,4 +87,15 @@ Route::middleware('jwt.verify')->group(function () {
 Route::middleware('jwt.verify')->group(function () {
     Route::get('/top-services-last-month', [HomeController::class, 'topServicesLastMonth']);
     Route::get('/top-days-last-month', [HomeController::class, 'topDaysLastMonth']);
+});
+
+// Personal
+Route::middleware('jwt.verify')->group(function () {
+    Route::get('/personal', [PersonalController::class, 'index']);
+    Route::get('/personal/list/active/{id}', [PersonalController::class, 'personalActiveByServiceId']);
+    Route::get('/personal/{id}', [PersonalController::class, 'show']);
+    Route::post('/personal', [PersonalController::class, 'store']);
+    Route::delete('/personal/{id}', [PersonalController::class, 'destroy']);
+    Route::patch('/personal/{id}', [PersonalController::class, 'updatePartial']);
+    Route::put('/personal/{id}', [PersonalController::class, 'update']);
 });

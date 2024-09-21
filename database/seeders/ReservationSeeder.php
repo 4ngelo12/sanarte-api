@@ -13,13 +13,14 @@ class ReservationSeeder extends Seeder
      */
     public function run(): void
     {
-        $reservationd = [
+        $Reservation = [
             [
                 'date_reservation' => '2024-05-20',
                 'time_reservation' => '16:00',
                 'status_id' => 2,
                 'client_id' => 1,
                 'service_id' => 1,
+                'personal_id' => 1,
                 'user_id' => 1,
             ],
             [
@@ -28,6 +29,7 @@ class ReservationSeeder extends Seeder
                 'status_id' => 2,
                 'client_id' => 2,
                 'service_id' => 2,
+                'personal_id' => 2,
                 'user_id' => 1,
             ],
             [
@@ -36,6 +38,7 @@ class ReservationSeeder extends Seeder
                 'status_id' => 3,
                 'client_id' => 3,
                 'service_id' => 3,
+                'personal_id' => 3,
                 'user_id' => 1,
             ],
             [
@@ -44,6 +47,7 @@ class ReservationSeeder extends Seeder
                 'status_id' => 2,
                 'client_id' => 1,
                 'service_id' => 3,
+                'personal_id' => 4,
                 'user_id' => 1,
             ],
             [
@@ -52,6 +56,7 @@ class ReservationSeeder extends Seeder
                 'status_id' => 3,
                 'client_id' => 3,
                 'service_id' => 1,
+                'personal_id' => 5,
                 'user_id' => 1,
             ],
             [
@@ -60,17 +65,19 @@ class ReservationSeeder extends Seeder
                 'status_id' => 2,
                 'client_id' => 2,
                 'service_id' => 4,
-                'user_id' => 3,
+                'personal_id' => 6,
+                'user_id' => 2,
             ],
         ];
 
-        foreach ($reservationd as $reservation) {
+        foreach ($Reservation as $reservation) {
             $newReservation = new Reservation();
             $newReservation->date_reservation = $reservation['date_reservation'];
             $newReservation->time_reservation = $reservation['time_reservation'];
             $newReservation->status_id = $reservation['status_id'];
             $newReservation->client_id = $reservation['client_id'];
             $newReservation->service_id = $reservation['service_id'];
+            $newReservation->personal_id = $reservation['personal_id'];
             $newReservation->user_id = $reservation['user_id'];
 
             $newReservation->save();

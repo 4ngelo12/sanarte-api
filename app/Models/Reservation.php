@@ -18,14 +18,16 @@ class Reservation extends Model
         'status_id',
         'user_id',
         'client_id',
-        'service_id'
+        'service_id',
+        'personal_id' 
     ];
 
-    protected $appends = ['user_name', 'client_name', 'service_name', 'status_name'];
+    protected $appends = ['user_name', 'client_name', 'service_name', 'personal_name', 'status_name'];
 
     protected $hidden = [
         'client',
         'service',
+        'personal',
         'user',
         'status',
         "created_at",
@@ -50,6 +52,16 @@ class Reservation extends Model
     public function getServiceNameAttribute()
     {
         return $this->service->name;
+    }
+
+    public function personal()
+    {
+        return $this->belongsTo(Personal::class);
+    }
+
+    public function getPersonalNameAttribute()
+    {
+        return $this->personal->name . ' ' . $this->personal->lastname;
     }
 
     public function user()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ReservationController extends Controller
@@ -39,23 +40,57 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'date_reservation' => [
+            'reservations' => 'required|array',
+            'reservations.*.date_reservation' => [
                 'required',
                 'date_format:Y-m-d',
-                function ($attribute, $value, $fail) {
+                function ($attribute, $value, $fail) use ($request) {
                     $inputDate = Carbon::createFromFormat('Y-m-d', $value)->startOfDay();
                     $today = Carbon::today();
 
-                    if ($inputDate <= $today) {
+                    if ($inputDate < $today) {
                         $fail('The ' . $attribute . ' must be a date after today.');
+                    }
+
+                    // Obtener el índice de la reserva actual
+                    $index = explode('.', $attribute)[1];
+                    $time_reservation = $request->reservations[$index]['time_reservation'];
+                    $service_id = $request->reservations[$index]['service_id'];
+
+                    // Obtener la duración máxima del arreglo duration de la tabla services
+                    $service = DB::table('services')->where('id', $service_id)->first();
+                    $durations = json_decode($service->duration); // Decodificar el arreglo
+                    $maxDuration = max($durations); // Obtener la duración más alta
+
+                    // Verificar si ya existe una reserva en la base de datos para la misma fecha
+                    $existingReservation = Reservation::whereDate('date_reservation', $value)
+                        ->where('service_id', $service_id)
+                        ->first();
+
+                    if ($existingReservation) {
+                        $existingTime = Carbon::parse($existingReservation->time_reservation);
+
+                        // Calcular la diferencia en minutos
+                        $inputTime = Carbon::parse($time_reservation);
+                        $differenceInMinutes = $inputTime->diffInMinutes($existingTime);
+                        $formattedTime = Carbon::parse($time_reservation)->format('H:i');
+
+                        // Verificar si la diferencia es menor a la duración máxima
+                        if ($differenceInMinutes < $maxDuration) {
+                            $fail("Ya hay una reserva en el dia $value a las $formattedTime, la nueva reserva debe tener al menos $maxDuration minutos de diferencia.");
+                        }
                     }
                 },
             ],
-            'time_reservation' => ['nullable', 'regex:/^([01][0-9]|2[0-3]):([0-5][0-9])$/'], // Validación de formato HH:MM
-            'status_id' => 'integer',
-            'service_id' => 'required|integer',
-            'client_id' => 'required|integer',
-            'user_id' => 'required|integer',
+            'reservations.*.time_reservation' => [
+                'nullable',
+                'regex:/^([01][0-9]|2[0-3]):([0-5][0-9])$/' // Validación de formato HH:MM
+            ],
+            'reservations.*.status_id' => 'integer',
+            'reservations.*.service_id' => 'required|integer',
+            'reservations.*.client_id' => 'required|integer',
+            'reservations.*.personal_id' => 'required|integer',
+            'reservations.*.user_id' => 'required|integer',
         ]);
 
         if ($validation->fails()) {
@@ -65,36 +100,46 @@ class ReservationController extends Controller
             ], 400);
         }
 
-        // Convertir fecha y hora al formato adecuado
-        $date_reservation = Carbon::createFromFormat('Y-m-d', $request->date_reservation)->startOfDay();
-        $time_reservation = Carbon::parse($request->time_reservation)->format('H:i'); // Formatear a HH:MM
-        // Guardar los datos en la base de datos
-        $reservation = new Reservation();
-        $reservation->date_reservation = $date_reservation;
-        $reservation->time_reservation = $time_reservation;
-        $reservation->status_id = 1;
-        $reservation->service_id = $request->service_id;
-        $reservation->client_id = $request->client_id;
-        $reservation->user_id = $request->user_id;
-        $reservation->save();
+        // Procesar las reservas si pasan la validación
+        $reservationsData = $request->reservations;
+        $createdReservations = [];
 
-        // $reservation = Reservation::create($validatedData);
+        foreach ($reservationsData as $reservationData) {
+            // Convertir fecha y hora al formato adecuado
+            $date_reservation = Carbon::createFromFormat('Y-m-d', $reservationData['date_reservation'])->startOfDay();
+            $time_reservation = Carbon::parse($reservationData['time_reservation'])->format('H:i'); // Formatear a HH:MM
 
-        if (!$reservation) {
-            return response()->json([
-                'message' => 'Error al realizar la reserva, intente nuevamente',
-                'status' => 500
-            ], 500);
+            // Guardar los datos en la base de datos
+            $reservation = new Reservation();
+            $reservation->date_reservation = $date_reservation;
+            $reservation->time_reservation = $time_reservation;
+            $reservation->status_id = 1;
+            $reservation->service_id = $reservationData['service_id'];
+            $reservation->personal_id = $reservationData['personal_id'];
+            $reservation->client_id = $reservationData['client_id'];
+            $reservation->user_id = $reservationData['user_id'];
+            $reservation->save();
+
+            if (!$reservation) {
+                return response()->json([
+                    'message' => 'Error al realizar la reserva, intente nuevamente',
+                    'status' => 500
+                ], 500);
+            }
+
+            $createdReservations[] = $reservation;
         }
 
         $response = [
-            'message' => 'Reserva realizada correctamente',
+            'message' => 'Reservas realizadas correctamente',
             'status' => 201,
-            'data' => $reservation
+            'data' => $createdReservations
         ];
 
         return response()->json($response, 201);
     }
+
+
 
     /**
      * Display the specified resource.

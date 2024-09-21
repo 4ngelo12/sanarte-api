@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             StatusSeeder::class,
             ServiceSeeder::class,
+            PersonalSeeder::class,
             ReservationSeeder::class,
         ]);
         // // User::factory(10)->create();

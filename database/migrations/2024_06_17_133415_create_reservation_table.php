@@ -11,6 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('personal', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', length: 45);
+            $table->string('lastname', length: 45);
+            $table->string('phone', length: 10)->unique();
+            $table->boolean('status')->default(true);
+            $table->foreignId('service_id')->constrained(table: 'services', indexName: 'fk_service_id')->cascadeOnDelete();
+            $table->timestamps();
+        });
+
         Schema::create('status', function (Blueprint $table) {
             $table->id();
             $table->string('name', length: 25)->unique();
@@ -24,6 +34,7 @@ return new class extends Migration
             $table->time('time_reservation');
             $table->foreignId('status_id')->constrained(table: 'status', indexName: 'status_id')->cascadeOnDelete();
             $table->foreignId('service_id')->constrained(table: 'services', indexName: 'service_id')->cascadeOnDelete();
+            $table->foreignId('personal_id')->constrained(table: 'personal', indexName: 'personal_id')->cascadeOnDelete();
             $table->foreignId('client_id')->constrained(table: 'clients', indexName: 'client_id')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained(table: 'users', indexName: 'user_id')->cascadeOnDelete();
             
@@ -36,6 +47,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('personal');
         Schema::dropIfExists('status');
         Schema::dropIfExists('reservation');
     }
